@@ -1,3 +1,4 @@
+from cv2 import phase
 import numpy as np
 import pandas as pd
 import cmath, math
@@ -18,10 +19,35 @@ def getPolar(var):
         magnitude = round(magnitude, PRECISION)
 
     if USE_DEGREES:
-        return f"{magnitude}∠{round(math.degrees(angle), PRECISION)}°"
+        return f"{magnitude}∠{round(np.degrees(angle), PRECISION)}°"
     else:
         return f"{magnitude}∠{round(angle, PRECISION)} rad"
+
+def getComplex(string: str) -> complex: 
+    useDegrees = None
+    # parse input string
+    splitted = string.split()
+    lenSplitted = len(splitted)
+    if (lenSplitted == 1) and (string[-1] == "°" ):
+        useDegrees = True
+    elif (lenSplitted == 2) and (splitted[-1] == "rad"):
+        useDegrees = False
+    else:
+        raise Exception("Incompatible string input!")
+
+    compStr = splitted[0].replace("°", "").split("∠")
+    magnitude = float(compStr[0]); angle = float(compStr[1])
+
+    if useDegrees:
+        angle = np.deg2rad(angle)
+    
+    return complex(real=magnitude*np.cos(angle), imag=magnitude*np.sin(angle))
+    
+
+        
 
 # If the file is run standalone, perform DEBUG
 if __name__ == "__main__":
     print(getPolar(4 - 4j))
+    print(getComplex("5∠37°"))
+    print(getComplex("10∠0.785 rad"))
