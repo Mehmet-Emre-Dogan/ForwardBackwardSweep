@@ -39,7 +39,6 @@ def getComplex(string: str) -> complex:
         angle = np.deg2rad(angle)
     
     return complex(real=magnitude*np.cos(angle), imag=magnitude*np.sin(angle))
-    
         
 
 # If the file is run standalone, perform DEBUG
