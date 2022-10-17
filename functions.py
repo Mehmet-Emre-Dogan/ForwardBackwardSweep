@@ -1,9 +1,6 @@
-from cv2 import phase
 import numpy as np
 import pandas as pd
 import cmath, math
-
-from sympy import true
 
 # https://medogan.com/blogs/2022/06/06/transmission_line_analysis/transmission_line_sending_edge_vi.html
 # https://stackoverflow.com/questions/6913532/display-a-decimal-in-scientific-notation
@@ -43,7 +40,6 @@ def getComplex(string: str) -> complex:
     
     return complex(real=magnitude*np.cos(angle), imag=magnitude*np.sin(angle))
     
-
         
 
 # If the file is run standalone, perform DEBUG
