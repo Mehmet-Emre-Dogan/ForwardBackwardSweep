@@ -3,45 +3,63 @@ import numpy as np
 import pandas as pd
 from constants import *
 from functions import *
+DEBUG = False
 
 # https://stackoverflow.com/questions/3518778/how-do-i-read-csv-data-into-a-record-array-in-numpy
-lineData = pd.read_csv('lineData.csv', sep=',', header=0); lineData = lineData.apply(pd.to_numeric, errors='coerce')
-busData = pd.read_csv('busData.csv', sep=',', header=0); busData = busData.replace("?", np.nan)
-busData = busData.apply(pd.to_numeric, errors='coerce')
+lineData = pd.read_csv('lineData.csv', sep=',', header=0)
+lineData.impedance = lineData.impedance.apply(lambda x: complex(x)) # ohms
+lineData.impedance = lineData.impedance.apply(lambda r : r/Z_base) # p.u.
+if DEBUG:
+    print("Line Data")
+    print(lineData)
+busData = pd.read_csv('busData.csv', sep=',', header=0)
+busData.S = busData.S.apply(lambda x: complex(x)) # MVA
+busData.S = busData.S.apply(lambda s : s/S_base) # p.u.
+if DEBUG:
+    print("Bus Data")
+    print(busData)
 
-# lineData.loc[:, "resistance"].apply(lambda r : r/Z_base)
-# print(lineData[["resistance", "reactance"]])
-print(lineData)
-print(busData)
-lineData[["resistance", "reactance"]] = lineData[["resistance", "reactance"]].apply(lambda r : r/Z_base)
-busData[["voltage"]] = busData[["voltage"]].applymap(lambda v : v/V_base, na_action="ignore")
-busData[["P_loads", "Q_loads", "P_gens", "Q_gens"]] = busData[["P_loads", "Q_loads", "P_gens", "Q_gens"]].applymap(lambda s : s/S_base, na_action="ignore")
-print(lineData)
-print(busData)
+# the voltage at first node is already 1 p.u.
+vArr = np.ones(busData.__len__(), dtype=np.complex64) # assume all other values are also 1 p.u.
+if DEBUG:
+    print(f"{vArr=}")
 
-zArr = lineData.resistance + 1j*lineData.reactance
-print(zArr)
-sArr = busData.P_loads - busData.P_gens + 1j*(busData.Q_loads - busData.Q_gens)
-print(sArr)
-print(np.isnan(sArr))
+# the load current draw at first node is already 0 p.u.
+# assume all other values are also 0 p.u.
+iLoadArr = np.zeros(busData.__len__(), dtype=np.complex64) # in p.u  
+iLineArr = np.zeros(lineData.__len__(), dtype=np.complex64) # fill it with zeros too
+zeroArr = np.zeros(lineData.__len__())
 
-length = np.max([np.max(lineData.fromNode), np.max(lineData.toNode)])
-print(f"{length=}")
+for iter in range(NUMBER_OF_ITERS):
+    print(f"iteration: {iter+1}")
+    if DEBUG:
+        print(f"{iLoadArr=}")
 
-vArr = np.ones(length)
-iLineArr = np.zeros(length)
+    # BACKWARD
+    for idx, (vBus, sBus) in enumerate(zip(vArr, busData.S)):
+        iLoadArr[idx] = np.conj(sBus/vBus)
+    iLoadArr[0] = np.conj(0)
+    if DEBUG:
+        print(f"{iLoadArr=}")
 
+    # print(list(lineData.fromNode))
+    for idx, endNode in reversed(list(enumerate(lineData.toNode))):
+        # print(idx, endNode)
+        if endNode not in set(lineData.fromNode):
+            # print(endNode)
+            iLineArr[idx] = iLoadArr[idx+1]
+        else:
+            iLineArr[idx] = np.sum(np.where(lineData.fromNode == endNode, iLineArr, zeroArr))
+    if DEBUG:
+        print(f"{iLineArr=}")
 
-iLoadArr = np.conj(np.divide(sArr, vArr))
-print(iLoadArr)
-for i in range(NUMBER_OF_ITERS):
-    print(i)
-    for j in range(len(lineData)-1, -1, -1):
-        # print(j)
-        hub = np.where(lineData.iloc[:, 0:1] == lineData.iloc[j, 1])
-        if np.size(hub) == 1: # start or endpoint
-            iLineArr[lineData.iloc[j, 0]-1] = iLoadArr[lineData.iloc[j, 2]-1] + np.sum(iLineArr[lineData.iloc[hub, 0]-1]) - iLineArr[lineData.iloc[j, 0]-1]
+    # FORWARD
+    # print(len(vArr), len(iLineArr), len(lineData.impedance))
+    for idx, (vBus, iLine, z) in enumerate(zip(vArr, iLineArr, lineData.impedance)):
+        vArr[idx+1] = vArr[idx] - iLine*z
 
-    for j in range(len(lineData)):
-        vArr[lineData.iloc[j, 2]-1] = vArr[lineData.iloc[j, 1]-1] - iLineArr[lineData.iloc[j, 0]-1]*zArr[j]    
-print (iLineArr)
+    if DEBUG:
+        print(f"{vArr=}")
+
+print(list(vArr))
+print(list(getPolarArr(vArr)))

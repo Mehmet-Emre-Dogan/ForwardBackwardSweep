@@ -39,7 +39,8 @@ def getComplex(string: str) -> complex:
         angle = np.deg2rad(angle)
     
     return complex(real=magnitude*np.cos(angle), imag=magnitude*np.sin(angle))
-        
+
+getPolarArr = np.vectorize(getPolar)
 
 # If the file is run standalone, perform DEBUG
 if __name__ == "__main__":
