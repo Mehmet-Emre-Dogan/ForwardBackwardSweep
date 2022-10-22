@@ -48,10 +48,10 @@ for iter in range(NUMBER_OF_ITERS):
         if endNode not in set(lineData.fromNode):
             # print(endNode)
             iLineArr[idx] = iLoadArr[idx+1]
-            print(idx)
+            # print(idx)
         else:
             iLineArr[idx] = np.sum(np.where(lineData.fromNode == endNode, iLineArr, zeroArr))
-            print(iLineArr[idx])
+            # print(iLineArr[idx])
     if DEBUG:
         print(f"{iLineArr=}")
 
