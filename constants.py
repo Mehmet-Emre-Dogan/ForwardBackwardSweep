@@ -6,3 +6,4 @@ V_BASE_KV = 54 # kV
 S_base = S_BASE_MVA#*1e6
 V_base = V_BASE_KV#*1e3
 Z_base = (V_base**2)/S_base
+I_base = S_base/V_base#*1e3

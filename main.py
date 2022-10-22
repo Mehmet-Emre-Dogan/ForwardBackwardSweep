@@ -48,8 +48,10 @@ for iter in range(NUMBER_OF_ITERS):
         if endNode not in set(lineData.fromNode):
             # print(endNode)
             iLineArr[idx] = iLoadArr[idx+1]
+            print(idx)
         else:
             iLineArr[idx] = np.sum(np.where(lineData.fromNode == endNode, iLineArr, zeroArr))
+            print(iLineArr[idx])
     if DEBUG:
         print(f"{iLineArr=}")
 
@@ -61,5 +63,13 @@ for iter in range(NUMBER_OF_ITERS):
     if DEBUG:
         print(f"{vArr=}")
 
+print("Bus voltages: ")
 print(list(vArr))
 print(list(getPolarArr(vArr)))
+print("Line currents: ")
+print(list(iLineArr))
+print(list(getPolarArr(iLineArr)))
+
+sIn = getPolar(vArr[0]*np.conj(iLineArr[0]))
+sOut= getPolar(np.sum(busData.S) + np.sum(np.multiply(iLineArr, lineData.impedance)))
+print(f"S_in = {sIn} S_out = {sOut}")
