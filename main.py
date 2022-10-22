@@ -21,6 +21,7 @@ if DEBUG:
 
 # the voltage at first node is already 1 p.u.
 vArr = np.ones(busData.__len__(), dtype=np.complex64) # assume all other values are also 1 p.u.
+vArrOld = vArr
 if DEBUG:
     print(f"{vArr=}")
 
@@ -30,7 +31,7 @@ iLoadArr = np.zeros(busData.__len__(), dtype=np.complex64) # in p.u
 iLineArr = np.zeros(lineData.__len__(), dtype=np.complex64) # fill it with zeros too
 zeroArr = np.zeros(lineData.__len__())
 
-for iter in range(NUMBER_OF_ITERS):
+for iter in range(MAX_NUMBER_OF_ITERS):
     print(f"iteration: {iter+1}")
     if DEBUG:
         print(f"{iLoadArr=}")
@@ -60,12 +61,15 @@ for iter in range(NUMBER_OF_ITERS):
     for idx, (vBus, iLine, z) in enumerate(zip(vArr, iLineArr, lineData.impedance)):
         vArr[idx+1] = vArr[idx] - iLine*z
 
+    if np.max(np.abs(np.subtract(vArr, vArrOld))) < MAX_ERROR:
+        print(f"Error requirement satisfied in {iter+1} iters.")
+    vArrOld = np.copy(vArr)
     if DEBUG:
         print(f"{vArr=}")
 
 print("Bus voltages: ")
-print(list(vArr))
-print(list(getPolarArr(vArr)))
+# print(list(vArr))
+[print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(getPolarArr(vArr)))]
 print("Line currents: ")
 print(list(iLineArr))
 print(list(getPolarArr(iLineArr)))
