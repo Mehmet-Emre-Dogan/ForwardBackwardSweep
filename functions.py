@@ -40,7 +40,11 @@ def getComplex(string: str) -> complex:
     
     return complex(real=magnitude*np.cos(angle), imag=magnitude*np.sin(angle))
 
+def getPower(current:complex, impedance:complex)->complex:
+    return np.abs(current)**2 * impedance
+
 getPolarArr = np.vectorize(getPolar)
+getPowerArr = np.vectorize(getPower)
 
 # If the file is run standalone, perform DEBUG
 if __name__ == "__main__":
