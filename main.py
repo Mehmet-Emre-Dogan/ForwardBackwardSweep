@@ -2,7 +2,11 @@ import numpy as np
 import pandas as pd
 from constants import *
 from functions import *
+import timeit
 DEBUG = False
+
+print("Fetching data...")
+startTime = timeit.default_timer()
 
 # https://stackoverflow.com/questions/3518778/how-do-i-read-csv-data-into-a-record-array-in-numpy
 lineData = pd.read_csv('lineData.csv', sep=',', header=0)
@@ -29,6 +33,10 @@ if DEBUG:
 iLoadArr = np.zeros(busData.__len__(), dtype=np.complex64) # in p.u  
 iLineArr = np.zeros(lineData.__len__(), dtype=np.complex64) # fill it with zeros too
 
+stopTime = timeit.default_timer()
+print(f"-> Data fetched successfully in {stopTime-startTime} seconds.")
+
+startTime = timeit.default_timer()
 for iter in range(MAX_NUMBER_OF_ITERS):
     print(f"iteration: {iter+1}")
 
@@ -58,12 +66,14 @@ for iter in range(MAX_NUMBER_OF_ITERS):
         vArr[lineData.toNode[idx]-1] = vArr[lineData.fromNode[idx]-1] - iLine*z
 
     if np.max(np.abs(np.subtract(vArr, vArrOld))) < MAX_ERROR:
-        print(f"Error requirement satisfied in {iter+1} iters.")
+        print(f"--> Error requirement satisfied in {iter+1} iters.")
         break
     vArrOld = np.copy(vArr)
     if DEBUG:
         print(f"{list(vArr)=}")
 
+stopTime = timeit.default_timer()
+print(f"-> Calculation done in {stopTime-startTime} seconds.")
 print("#"*70)
 print("Bus voltages: ")
 [print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(getPolarArr(vArr)))]
