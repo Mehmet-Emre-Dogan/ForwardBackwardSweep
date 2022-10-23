@@ -1,4 +1,3 @@
-from cmath import pi
 import numpy as np
 import pandas as pd
 from constants import *
@@ -29,7 +28,6 @@ if DEBUG:
 # assume all other values are also 0 p.u.
 iLoadArr = np.zeros(busData.__len__(), dtype=np.complex64) # in p.u  
 iLineArr = np.zeros(lineData.__len__(), dtype=np.complex64) # fill it with zeros too
-zeroArr = np.zeros(lineData.__len__())
 
 for iter in range(MAX_NUMBER_OF_ITERS):
     print(f"iteration: {iter+1}")
@@ -78,7 +76,6 @@ for iter in range(MAX_NUMBER_OF_ITERS):
 
 print("#"*70)
 print("Bus voltages: ")
-# print(list(vArr))
 [print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(getPolarArr(vArr)))]
 print("Line currents: ")
 [print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(iLineArr))]
