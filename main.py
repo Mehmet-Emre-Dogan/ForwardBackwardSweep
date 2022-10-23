@@ -35,19 +35,12 @@ for iter in range(MAX_NUMBER_OF_ITERS):
     # BACKWARD
     for idx, (vBus, sBus) in enumerate(zip(vArr, busData.S)):
         iLoadArr[idx] = np.conj(sBus/vBus)
-    # iLoadArr[0] = np.conj(0)
     if DEBUG:
         print(f"{list(iLoadArr)=}")
 
-    # print(list(lineData.fromNode))
     for idx, endNode in reversed(list(enumerate(lineData.toNode))):
-        # print(idx, endNode)
         if endNode not in set(lineData.fromNode):
-            # print(endNode)
             iLineArr[idx] = iLoadArr[idx+1]
-            # print(idx)
-        # else:
-        #     print(idx, endNode)
         else:
             boolSelector = lineData.fromNode == endNode
             if DEBUG:
@@ -61,10 +54,7 @@ for iter in range(MAX_NUMBER_OF_ITERS):
         print(f"{list(iLineArr)=}")
 
     # FORWARD
-    # print(len(vArr), len(iLineArr), len(lineData.impedance))
     for idx, (iLine, z) in enumerate(zip(iLineArr, lineData.impedance)):
-        # vArr[idx+1] = vArr[idx] - iLine*z
-        # print(lineData.toNode[idx])
         vArr[lineData.toNode[idx]-1] = vArr[lineData.fromNode[idx]-1] - iLine*z
 
     if np.max(np.abs(np.subtract(vArr, vArrOld))) < MAX_ERROR:
