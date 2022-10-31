@@ -21,7 +21,7 @@
 4. Run  `main.py`.
 
 # Old Test Data Visualization
-![test data image](.\pics\oldDataHandwritten.jpg)
+![test data image](./pics/oldDataHandwritten.jpg)
 
 # Credits
 
