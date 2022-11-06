@@ -13,21 +13,15 @@ startTime = timeit.default_timer()
 lineData = pd.read_csv('lineData.csv', sep=',', header=0)
 lineData.impedance = lineData.impedance.apply(lambda x: complex(x)) # ohms
 lineData.impedance = lineData.impedance.apply(lambda r : r/Z_base) # p.u.
-if DEBUG:
-    print("Line Data")
-    print(lineData)
+
 busData = pd.read_csv('busData.csv', sep=',', header=0)
 busData.S = busData.S.apply(lambda x: complex(x)) # MVA  *1e6
 busData.S = busData.S.apply(lambda s : s/S_base/1000) # p.u. /1000 to convert kVA to MVA
-if DEBUG:
-    print("Bus Data")
-    print(busData)
+
 
 # the voltage at first node is already 1 p.u.
 vArr = np.ones(busData.__len__(), dtype=np.complex64) # assume all other values are also 1 p.u.
 vArrOld = vArr.copy()
-if DEBUG:
-    print(f"{vArr=}")
 
 # the load current draw at first node is already 0 p.u.
 # assume all other values are also 0 p.u.
@@ -52,16 +46,7 @@ for iter in range(MAX_NUMBER_OF_ITERS):
             iLineArr[idx] = iLoadArr[idx+1]
         else:
             boolSelector = lineData.fromNode == endNode
-            if DEBUG:
-                print(endNode)
-                print(boolSelector)
-                print(iLineArr[boolSelector])
-                print(iLoadArr[endNode-1])
-            iLineArr[idx] = np.sum(iLineArr[boolSelector]) + iLoadArr[idx+1]
             
-    if DEBUG:
-        print(f"{list(iLineArr)=}")
-
     # FORWARD
     for idx, (iLine, z) in enumerate(zip(iLineArr, lineData.impedance)):
         vArr[lineData.toNode[idx]-1] = vArr[lineData.fromNode[idx]-1] - iLine*z
@@ -70,8 +55,6 @@ for iter in range(MAX_NUMBER_OF_ITERS):
         print(f"--> Error requirement satisfied in {iter+1} iters.")
         break
     vArrOld = np.copy(vArr)
-    if DEBUG:
-        print(f"{list(vArr)=}")
 
 stopTime = timeit.default_timer()
 print(f"-> Calculation done in {stopTime-startTime} seconds.")
