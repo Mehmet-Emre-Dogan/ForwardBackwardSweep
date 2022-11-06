@@ -5,7 +5,7 @@ import cmath, math
 # https://medogan.com/blogs/2022/06/06/transmission_line_analysis/transmission_line_sending_edge_vi.html
 # https://stackoverflow.com/questions/6913532/display-a-decimal-in-scientific-notation
 def getPolar(var):
-    PRECISION = 5
+    PRECISION = 4
     USE_DEGREES = True
     magnitude = abs(var)
     angle = cmath.phase(var)

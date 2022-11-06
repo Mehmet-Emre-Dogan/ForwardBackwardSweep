@@ -76,19 +76,28 @@ for iter in range(MAX_NUMBER_OF_ITERS):
 stopTime = timeit.default_timer()
 print(f"-> Calculation done in {stopTime-startTime} seconds.")
 print("#"*70)
-print("Bus voltages: ")
-[print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(getPolarArr(vArr)))]
-print("Line currents: ")
-[print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(iLineArr))]
-print("Line currents: ")
-[print(f"{str(i).zfill(2)}-> {line}") for i, line in enumerate(list(getPolarArr(iLineArr)))]
+print("====> Per unit domain <====")
+print("==> Bus voltages:")
+[print(f"{str(i+1).zfill(2)}-> {line} p.u.") for i, line in enumerate(list(getPolarArr(vArr)))]
+print("==> Line currents: ")
+[print(f"{str(i+1).zfill(2)}-> {line} p.u.") for i, line in enumerate(list(getPolarArr(iLineArr)))]
+print("#"*70); print("\n")
+
+I_base = 1000*S_base/V_base/np.sqrt(3)
+print("#"*70)
+print("====> Phasor domain  <====")
+print("==> Bus voltages (line to line): ")
+[print(f"{str(i+1).zfill(2)}-> {line} kV") for i, line in enumerate(list(getPolarArr(vArr*V_base)))]
+print("==> Line currents: ")
+[print(f"{str(i+1).zfill(2)}-> {line} A") for i, line in enumerate(list(getPolarArr(iLineArr*I_base)))]
+print("#"*70); print("\n")
 
 print("#"*70)
 sIn = getPolar(vArr[0]*np.conj(iLineArr[0])*S_base*1e3)
 ploss = np.real(np.sum(getPowerArr(iLineArr, lineData.impedance)))
 sOut= getPolar((np.sum(busData.S) + np.sum(getPowerArr(iLineArr, lineData.impedance)) )*S_base*1e3)
 print(f"Line losses: {ploss*S_base*1e3} kW")
-print(f"#S_in = {sIn} kVA  #S_out = {sOut} kVA")
+print(f"#S_in = {sIn} kVA [injected complex power at bus_1]  \n#S_out = {sOut} kVA [consumed complex power at the rest of the system (cables, loads, generators...)] ")
 
 fig, ax = plt.subplots()
 ax.minorticks_on()
@@ -105,4 +114,41 @@ ax2.plot([cmath.phase(v) for v in vArr], color="orange")
 ax.grid(color='green',  which='major', linestyle = '--', linewidth = 1)
 ax.grid(color='black',  which='minor', linestyle = '--', linewidth = 0.5)
 ax.set_title('Bus voltages plot')
+fig.legend(['magnitude', 'angle'], loc ="upper right")
+# plt.show()
+
+fig_2, ax_2 = plt.subplots()
+ax_2.minorticks_on()
+ax_22 = ax_2.twinx()
+# set x-axis label
+ax_2.set_xlabel("Bus Number", fontsize = 14)
+# set y-axis label
+ax_2.set_ylabel("v (V, line-to-line)", fontsize=14)
+ax_22.set_ylabel("∠°", fontsize=14)
+
+ax_2.plot(abs(vArr*V_base))
+ax_22.plot([cmath.phase(v) for v in vArr*V_base], color="orange")
+
+ax_2.grid(color='green',  which='major', linestyle = '--', linewidth = 1)
+ax_2.grid(color='black',  which='minor', linestyle = '--', linewidth = 0.5)
+ax_2.set_title('Bus voltages plot')
+fig_2.legend(['magnitude', 'angle'], loc ="upper right")
+
+fig_3, ax_3 = plt.subplots()
+ax_3.minorticks_on()
+ax_32 = ax_3.twinx()
+# set x-axis label
+ax_3.set_xlabel("Line Number", fontsize = 14)
+# set y-axis label
+ax_3.set_ylabel("i (A)", fontsize=14)
+ax_32.set_ylabel("∠°", fontsize=14)
+
+ax_3.plot(abs(iLineArr*I_base))
+ax_32.plot([cmath.phase(i) for i in iLineArr*I_base], color="orange")
+
+ax_3.grid(color='green',  which='major', linestyle = '--', linewidth = 1)
+ax_3.grid(color='black',  which='minor', linestyle = '--', linewidth = 0.5)
+ax_3.set_title('Line currents plot')
+fig_3.legend(['magnitude', 'angle'], loc ="upper right")
+
 plt.show()
