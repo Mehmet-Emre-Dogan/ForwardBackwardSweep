@@ -46,6 +46,7 @@ for iter in range(MAX_NUMBER_OF_ITERS):
             iLineArr[idx] = iLoadArr[idx+1]
         else:
             boolSelector = lineData.fromNode == endNode
+            iLineArr[idx] = np.sum(iLineArr[boolSelector]) + iLoadArr[idx+1]
             
     # FORWARD
     for idx, (iLine, z) in enumerate(zip(iLineArr, lineData.impedance)):
