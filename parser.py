@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 from constants import *
-
-complexizeArray = np.vectorize(complex)
+from functions import complexizeArr as complexizeArray
 
 # https://pythonbasics.org/read-excel/
 def parseLineData(printEnabled: bool)->None:

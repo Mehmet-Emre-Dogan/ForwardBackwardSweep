@@ -1,6 +1,5 @@
 import numpy as np
-import pandas as pd
-import cmath, math
+import cmath
 import matplotlib.pyplot as plt
 
 # https://medogan.com/blogs/2022/06/06/transmission_line_analysis/transmission_line_sending_edge_vi.html
@@ -46,8 +45,10 @@ def getPower(current:complex, impedance:complex)->complex:
 
 getPolarArr = np.vectorize(getPolar)
 getPowerArr = np.vectorize(getPower)
+getAngleArr = np.vectorize(cmath.phase)
+complexizeArr = np.vectorize(complex)
 
-def plot(xData:np.array, xLabel:str, yData1:np.array, yLabel1:str, yData2:np.array, yLabel2:str, title="plotName", savePath=".\\output\\fig.png" )->None:
+def plot(xData:np.array, xLabel:str, yData1:np.array, yLabel1:str, yData2:np.array, yLabel2:str, legend:list, title="plotName", savePath=".\\output\\fig.png" )->None:
     fig, ax = plt.subplots()
     ax.minorticks_on()
     ax2 = ax.twinx()
@@ -57,13 +58,14 @@ def plot(xData:np.array, xLabel:str, yData1:np.array, yLabel1:str, yData2:np.arr
     ax.set_ylabel(yLabel1, fontsize=14)
     ax2.set_ylabel(yLabel2, fontsize=14)
 
-    ax.plot(xData)
-    ax2.plot(yData2, color="orange")
+    ax.plot(xData, yData1)
+    ax2.plot(xData, yData2, color="orange")
 
     ax.grid(color='green',  which='major', linestyle = '--', linewidth = 1)
     ax.grid(color='black',  which='minor', linestyle = '--', linewidth = 0.5)
     ax.set_title(title)
-    plt.savefig(savePath)
+    fig.legend(legend, loc ="upper right")
+    plt.savefig(savePath, dpi=300, bbox_inches='tight')
 
 # If the file is run standalone, perform DEBUG
 if __name__ == "__main__":
