@@ -1,0 +1,13 @@
+{
+    "Precision Settings": "",
+    "MAX_NUMBER_OF_ITERS" : 200,
+    "MAX_ERROR" : 1e-10,
+
+    "Base Values": "",
+    "S_BASE_MVA" : 100,
+    "V_BASE_KV" : 12.66,
+
+    "Input File Settings": "",
+    "INPUT_IS_PU": false,
+    "START_BUS": 1
+}

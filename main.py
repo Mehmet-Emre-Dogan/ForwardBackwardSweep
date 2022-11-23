@@ -11,17 +11,10 @@ startTime = timeit.default_timer()
 
 # https://stackoverflow.com/questions/3518778/how-do-i-read-csv-data-into-a-record-array-in-numpy
 lineData = pd.read_csv('lineData.csv', sep=',', header=0)
-lineData.impedance = lineData.impedance.apply(lambda x: complex(x)) # ohms
-lineData.impedance = lineData.impedance.apply(lambda r : r/Z_base) # p.u.
-if DEBUG:
-    print("Line Data")
-    print(lineData)
+lineData.impedance = lineData.impedance.apply(lambda x: complex(x)) # p.u.
+
 busData = pd.read_csv('busData.csv', sep=',', header=0)
-busData.S = busData.S.apply(lambda x: complex(x)) # MVA  *1e6
-busData.S = busData.S.apply(lambda s : s/S_base/1000) # p.u. /1000 to convert kVA to MVA
-if DEBUG:
-    print("Bus Data")
-    print(busData)
+busData.S = busData.S.apply(lambda x: complex(x)) # p.u.
 
 # the voltage at first node is already 1 p.u.
 vArr = np.ones(busData.__len__(), dtype=np.complex64) # assume all other values are also 1 p.u.
