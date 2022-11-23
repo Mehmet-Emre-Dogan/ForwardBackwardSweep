@@ -1,4 +1,5 @@
 from json import load
+DEBUG = False
 
 with open(".\\input\\config.json", "r", encoding="UTF-8") as fptr:
     jsonData = load(fptr)

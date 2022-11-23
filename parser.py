@@ -10,7 +10,7 @@ def parseLineData(printEnabled: bool)->None:
     if printEnabled:
         print(myDf.columns)
     myDf["impedance"] = complexizeArray(myDf["r_ohm_"], myDf["x_ohm_"])
-    myDf.rename(columns={'fr.': 'fromNode', 'to': 'toNode'}, inplace=True)
+    myDf.rename(columns={'from': 'fromNode', 'to': 'toNode'}, inplace=True)
     if printEnabled:
         print(myDf)
     myDf.drop(['r_ohm_','x_ohm_'] , axis=1, inplace=True)
@@ -23,8 +23,8 @@ def parseBusData(printEnabled: bool)->None:
     if printEnabled:
         print(myDf.columns)
     myDf["S"] = complexizeArray(myDf["kW"], myDf["kVAR"])
-    myDf["atNode"] = myDf.index + 1
-    myDf = myDf.reindex(columns=['atNode', 'kW', 'kVAR', 'S'])
+    myDf.rename(columns={'at': 'atNode'}, inplace=True)
+    myDf = myDf.reindex(columns=['name', 'atNode', 'kW', 'kVAR', 'S'])
     if printEnabled:
         print(myDf)
     myDf.drop(['kW','kVAR'] , axis=1, inplace=True)
