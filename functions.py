@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import cmath, math
+import matplotlib.pyplot as plt
 
 # https://medogan.com/blogs/2022/06/06/transmission_line_analysis/transmission_line_sending_edge_vi.html
 # https://stackoverflow.com/questions/6913532/display-a-decimal-in-scientific-notation
@@ -45,6 +46,24 @@ def getPower(current:complex, impedance:complex)->complex:
 
 getPolarArr = np.vectorize(getPolar)
 getPowerArr = np.vectorize(getPower)
+
+def plot(xData:np.array, xLabel:str, yData1:np.array, yLabel1:str, yData2:np.array, yLabel2:str, title="plotName", savePath=".\\output\\fig.png" )->None:
+    fig, ax = plt.subplots()
+    ax.minorticks_on()
+    ax2 = ax.twinx()
+    # set x-axis label
+    ax.set_xlabel(xLabel, fontsize = 14)
+    # set y-axis label
+    ax.set_ylabel(yLabel1, fontsize=14)
+    ax2.set_ylabel(yLabel2, fontsize=14)
+
+    ax.plot(xData)
+    ax2.plot(yData2, color="orange")
+
+    ax.grid(color='green',  which='major', linestyle = '--', linewidth = 1)
+    ax.grid(color='black',  which='minor', linestyle = '--', linewidth = 0.5)
+    ax.set_title(title)
+    plt.savefig(savePath)
 
 # If the file is run standalone, perform DEBUG
 if __name__ == "__main__":

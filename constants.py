@@ -9,6 +9,9 @@ with open(".\\input\\config.json", "r", encoding="UTF-8") as fptr:
     S_BASE_MVA = jsonData["S_BASE_MVA"] # MVA
     V_BASE_KV = jsonData["V_BASE_KV"] # kV
 
+    INPUT_IS_PU = jsonData["INPUT_IS_PU"]
+    START_BUS = jsonData["START_BUS"]
+
 ################ DO NOT EDIT BELOW THE LINE ################
 S_base = S_BASE_MVA#*1e6
 V_base = V_BASE_KV#*1e3
