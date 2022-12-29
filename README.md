@@ -22,14 +22,14 @@
 4. OR Run  `run.bat`.
 
 # Results for IEEE 33-Bus 
-![image](./COMPARISON_WITH_SIEMENS-SINCAL\busVolt_pu.png)
+![image](./COMPARISON_WITH_SIEMENS-SINCAL/busVolt_pu.png)
 
 # Comparison with Siemens PSS-Sincal
 ## Sincal's Results
-![image](./COMPARISON_WITH_SIEMENS-SINCAL\sincalRes.png)
+![image](./COMPARISON_WITH_SIEMENS-SINCAL/sincalRes.png)
 
 ## Deviation from Sincal's Results
-![image](./COMPARISON_WITH_SIEMENS-SINCAL\comparison.png)
+![image](./COMPARISON_WITH_SIEMENS-SINCAL/comparison.png)
 
 # Old Test Data Visualization
 ![test data image](./pics/oldDataHandwritten.jpg)
