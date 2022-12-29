@@ -21,7 +21,11 @@
 
 4. OR Run  `run.bat`.
 
-# Results for IEEE 33-Bus 
+# IEEE 33-Bus 
+## The Topology
+![image](./pics/pic.png)
+
+## Results
 ![image](./COMPARISON_WITH_SIEMENS-SINCAL/busVolt_pu.png)
 
 # Comparison with Siemens PSS-Sincal
