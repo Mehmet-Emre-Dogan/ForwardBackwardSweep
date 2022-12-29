@@ -6,6 +6,7 @@
 2. Run `pip install -r requirements.txt`
 
 # Usage
+1. Configure the `config.json` 
 1. Enter the bus data into `busIn.xlsx` 
     - Real: kW
     - Reactive: kVAR
@@ -16,9 +17,19 @@
     - Resistance: Ω
     - Reactance: Ω
 
-3. Run  `parser.py`. It will generate the necessary csv files.
+3. Run  `main.py`. It will generate the necessary csv files.
 
-4. Run  `main.py`.
+4. OR Run  `run.bat`.
+
+# Results for IEEE 33-Bus 
+![image](./COMPARISON_WITH_SIEMENS-SINCAL\busVolt_pu.png)
+
+# Comparison with Siemens PSS-Sincal
+## Sincal's Results
+![image](./COMPARISON_WITH_SIEMENS-SINCAL\sincalRes.png)
+
+## Deviation from Sincal's Results
+![image](./COMPARISON_WITH_SIEMENS-SINCAL\comparison.png)
 
 # Old Test Data Visualization
 ![test data image](./pics/oldDataHandwritten.jpg)
