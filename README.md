@@ -26,7 +26,7 @@
 ![image](./pics/pic.png)
 
 ## Results
-![image](./COMPARISON_WITH_SIEMENS-SINCAL/busVolt_pu.png)
+![image](./output/busVolt_pu.png)
 
 # Comparison with Siemens PSS-Sincal
 ## Sincal's Results
