@@ -1,5 +1,5 @@
 import numpy as np
-import cmath
+import cmath, math
 import matplotlib.pyplot as plt
 
 # https://medogan.com/blogs/2022/06/06/transmission_line_analysis/transmission_line_sending_edge_vi.html
@@ -43,9 +43,12 @@ def getComplex(string: str) -> complex:
 def getPower(current:complex, impedance:complex)->complex:
     return np.abs(current)**2 * impedance
 
+def getAngle(complx):
+    return math.degrees(cmath.phase(complx))
+
 getPolarArr = np.vectorize(getPolar)
 getPowerArr = np.vectorize(getPower)
-getAngleArr = np.vectorize(cmath.phase)
+getAngleArr = np.vectorize(getAngle)
 complexizeArr = np.vectorize(complex)
 
 def plot(xData:np.array, xLabel:str, yData1:np.array, yLabel1:str, yData2:np.array, yLabel2:str, legend:list, title="plotName", savePath=".\\output\\fig.png" )->None:
